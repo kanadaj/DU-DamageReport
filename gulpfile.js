@@ -4,6 +4,7 @@ const concat = require('gulp-concat');
 const replace = require('gulp-replace');
 const exec = require('gulp-exec');
 const log = require('fancy-log');
+const watch = require('gulp-watch');
  
 const slots = [
     "slot1:type=core",
@@ -73,4 +74,11 @@ function CompileAndWrap(){
     return gulp.series(Compile(), Wrap);
 }
 
+function Watch(){
+    for(var bundle of bundles){
+        watch(bundle.files, CompileAndWrap());
+    }
+}
+
 exports.default = CompileAndWrap();
+exports.watch = Watch;

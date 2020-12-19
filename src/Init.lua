@@ -19,7 +19,7 @@ function InitiateSlots()
                 db = slot
             elseif elementClass == "screenunit" then
                 local iScreenMode = "startup"
-                screens[#screens + 1] = { 
+                screens[#screens + 1] = {
                     element = slot, 
                     id = slot.getId(),
                     mode = iScreenMode,

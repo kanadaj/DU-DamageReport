@@ -1,4 +1,3 @@
-UpdateDataInterval = 0.2 -- How often shall the data be updated? (Increase if running into CPU issues.)
 HighlightBlinkingInterval = 0.5 -- How fast shall highlight arrows of marked elements blink?
 
 ColorPrimary = "FF6700" -- Enter the hexcode of the main color to be used by all views.

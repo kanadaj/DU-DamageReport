@@ -4,6 +4,14 @@ function script.onMouseDown (x, y)
     CheckClick(x, y)
 end
 
+function script.onTick (timerId)
+    if(timerId == "UpdateData") then
+        OnTickData()
+    elseif (timerId == "UpdateHighlight") then
+        ToggleHighlight()
+    end
+end
+
 function script.onStart()
     unit.hide()
     ClearConsole()
