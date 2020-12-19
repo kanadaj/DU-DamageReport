@@ -1,5 +1,5 @@
 --[[
-    Damage Report 3.12
+    Damage Report 3.13
     A LUA script for Dual Universe
 
     Created By Dorian Gray
@@ -63,7 +63,7 @@ function DrawCenteredText(output)
 end
 
 function ClearConsole()
-    for i = 1, 10, 1 do 
+    for i = 1, 2, 1 do 
         PrintConsole() 
     end 
 end
@@ -548,10 +548,13 @@ function UpdateDataDamageoutline()
             )
     ]]
 
+    local xScaler = 100/(ShipXmax-ShipXmin)
+    local yScaler = 100/(ShipYmax-ShipYmin)
+    local zScaler = 100/(ShipZmax-ShipZmin)
     for i,element in ipairs(dmgoElements) do
-        dmgoElements[i].xp = math.abs(100/(ShipXmax-ShipXmin)*(element.x-ShipXmin))
-        dmgoElements[i].yp = math.abs(100/(ShipYmax-ShipYmin)*(element.y-ShipYmin))
-        dmgoElements[i].zp = math.abs(100/(ShipZmax-ShipZmin)*(element.z-ShipZmin))
+        dmgoElements[i].xp = math.abs(xScaler*(element.x-ShipXmin))
+        dmgoElements[i].yp = math.abs(yScaler*(element.y-ShipYmin))
+        dmgoElements[i].zp = math.abs(zScaler*(element.z-ShipZmin))
         -- PrintConsole(i..". "..element.id..": "..string.format("%.2f",element.x).."/"..string.format("%.2f",element.y).."/"..string.format("%.2f",element.z).." - XP: "..dmgoElements[i].xp.." - YP: "..dmgoElements[i].yp.." - ZP: "..dmgoElements[i].zp)
     end
 
@@ -572,6 +575,8 @@ function UpdateViewDamageoutline(screen)
     UDim = 1880 - 2*UFrame
     VDim = 840 - 2*VFrame    
 
+    local UDimPercent = UDim / 100
+    local VDimPercent = VDim / 100
     if screen.submode == "top" then
         if DMGOStretch == false then
             local UFactor = UDim/(ShipYmax-ShipYmin)
@@ -581,22 +586,22 @@ function UpdateViewDamageoutline(screen)
                 local newUDim = math.floor(UDim/cFactor)
                 UStart = UStart+(UDim-newUDim)/2
                 for i,element in ipairs(dmgoElements) do
-                    dmgoElements[i].u = math.floor(UDim/100/cFactor*element.yp+UStart)
-                    dmgoElements[i].v = math.floor(VDim/100*element.xp+VStart)
+                    dmgoElements[i].u = math.floor(UDimPercent/cFactor*element.yp+UStart)
+                    dmgoElements[i].v = math.floor(VDimPercent*element.xp+VStart)
                 end
             else
                 local cFactor = VFactor/UFactor
                 local newVDim = math.floor(VDim/cFactor)
                 VStart = VStart+(VDim-newVDim)/2
                 for i,element in ipairs(dmgoElements) do
-                    dmgoElements[i].u = math.floor(UDim/100*element.yp+UStart)
-                    dmgoElements[i].v = math.floor(VDim/100/cFactor*element.xp+VStart)
+                    dmgoElements[i].u = math.floor(UDimPercent*element.yp+UStart)
+                    dmgoElements[i].v = math.floor(VDimPercent/cFactor*element.xp+VStart)
                 end
             end
         else
             for i,element in ipairs(dmgoElements) do
-                dmgoElements[i].u = math.floor(UDim/100*element.yp+UStart)
-                dmgoElements[i].v = math.floor(VDim/100*element.xp+VStart)
+                dmgoElements[i].u = math.floor(UDimPercent*element.yp+UStart)
+                dmgoElements[i].v = math.floor(VDimPercent*element.xp+VStart)
             end
         end
 
@@ -610,22 +615,22 @@ function UpdateViewDamageoutline(screen)
                 local newUDim = math.floor(UDim/cFactor)
                 UStart = UStart+(UDim-newUDim)/2
                 for i,element in ipairs(dmgoElements) do
-                    dmgoElements[i].u = math.floor(UDim/100/cFactor*element.xp+UStart)
-                    dmgoElements[i].v = math.floor(VDim/100*(100-element.zp)+VStart)
+                    dmgoElements[i].u = math.floor(UDimPercent/cFactor*element.xp+UStart)
+                    dmgoElements[i].v = math.floor(VDimPercent*(100-element.zp)+VStart)
                 end
             else
                 local cFactor = VFactor/UFactor
                 local newVDim = math.floor(VDim/cFactor)
                 VStart = VStart+(VDim-newVDim)/2
                 for i,element in ipairs(dmgoElements) do
-                    dmgoElements[i].u = math.floor(UDim/100*element.xp+UStart)
-                    dmgoElements[i].v = math.floor(VDim/100/cFactor*(100-element.zp)+VStart)
+                    dmgoElements[i].u = math.floor(UDimPercent*element.xp+UStart)
+                    dmgoElements[i].v = math.floor(VDimPercent/cFactor*(100-element.zp)+VStart)
                 end
             end
         else
             for i,element in ipairs(dmgoElements) do
-                dmgoElements[i].u = math.floor(UDim/100*element.xp+UStart)
-                dmgoElements[i].v = math.floor(VDim/100*(100-element.zp)+VStart)
+                dmgoElements[i].u = math.floor(UDimPercent*element.xp+UStart)
+                dmgoElements[i].v = math.floor(VDimPercent*(100-element.zp)+VStart)
             end
         end
 
@@ -638,22 +643,22 @@ function UpdateViewDamageoutline(screen)
                 local newUDim = math.floor(UDim/cFactor)
                 UStart = UStart+(UDim-newUDim)/2
                 for i,element in ipairs(dmgoElements) do
-                    dmgoElements[i].u = math.floor(UDim/100/cFactor*element.yp+UStart)
-                    dmgoElements[i].v = math.floor(VDim/100*(100-element.zp)+VStart)
+                    dmgoElements[i].u = math.floor(UDimPercent/cFactor*element.yp+UStart)
+                    dmgoElements[i].v = math.floor(VDimPercent*(100-element.zp)+VStart)
                 end
             else
                 local cFactor = VFactor/UFactor
                 local newVDim = math.floor(VDim/cFactor)
                 VStart = VStart+(VDim-newVDim)/2
                 for i,element in ipairs(dmgoElements) do
-                    dmgoElements[i].u = math.floor(UDim/100*element.yp+UStart)
-                    dmgoElements[i].v = math.floor(VDim/100/cFactor*(100-element.zp)+VStart)
+                    dmgoElements[i].u = math.floor(UDimPercent*element.yp+UStart)
+                    dmgoElements[i].v = math.floor(VDimPercent/cFactor*(100-element.zp)+VStart)
                 end
             end
         else
             for i,element in ipairs(dmgoElements) do
-                dmgoElements[i].u = math.floor(UDim/100*element.yp+UStart)
-                dmgoElements[i].v = math.floor(VDim/100*(100-element.zp)+VStart)
+                dmgoElements[i].u = math.floor(UDimPercent*element.yp+UStart)
+                dmgoElements[i].v = math.floor(VDimPercent*(100-element.zp)+VStart)
             end
         end
     else
@@ -919,27 +924,29 @@ function GetContentDamageHUDOutput()
 
             for currentIndex=hudStartIndex,hudStartIndex+9,1 do
                 if rE[currentIndex] ~= nil then
+                    local yPos = j * 26
+                    local missingHpYPos = 165 + yPos
                     v = rE[currentIndex]
                     if v.hp > 0 then 
-                        output = output .. [[<rect fill=#]]..ColorWarning..[[ fill-opacity=0.2 x=1 y=]]..(147+j*26)..[[ width=298 height=25 />]] ..
-                                           [[<text x=10 y=]]..(165+j*26)..[[ class="f15swb">]]..string.format("%.30s", v.name)..[[</text>]] ..
-                                           [[<text x=290 y=]]..(165+j*26)..[[ class="f15ewb">]]..GenerateCommaValue(string.format("%.0f", v.missinghp))..[[</text>]]
+                        output = output .. [[<rect fill=#]]..ColorWarning..[[ fill-opacity=0.2 x=1 y=]]..(147+yPos)..[[ width=298 height=25 />]] ..
+                                           [[<text x=10 y=]]..(missingHpYPos)..[[ class="f15swb">]]..string.format("%.30s", v.name)..[[</text>]] ..
+                                           [[<text x=290 y=]]..(missingHpYPos)..[[ class="f15ewb">]]..GenerateCommaValue(string.format("%.0f", v.missinghp))..[[</text>]]
                         if v.id == highlightID then
-                            output = output .. [[<rect fill=#]]..ColorWarning..[[ fill-opacity=1 x=1 y=]]..(147+j*26)..[[ width=298 height=25 />]] ..
-                                               [[<text x=10 y=]]..(165+j*26)..[[ class="f15sxxxb">]]..string.format("%.30s", v.name)..[[</text>]] ..
-                                               [[<text x=290 y=]]..(165+j*26)..[[ class="f15exxxb">]]..GenerateCommaValue(string.format("%.0f", v.missinghp))..[[</text>]]
+                            output = output .. [[<rect fill=#]]..ColorWarning..[[ fill-opacity=1 x=1 y=]]..(147+yPos)..[[ width=298 height=25 />]] ..
+                                               [[<text x=10 y=]]..(missingHpYPos)..[[ class="f15sxxxb">]]..string.format("%.30s", v.name)..[[</text>]] ..
+                                               [[<text x=290 y=]]..(missingHpYPos)..[[ class="f15exxxb">]]..GenerateCommaValue(string.format("%.0f", v.missinghp))..[[</text>]]
                         end                   
                     else 
-                        output = output .. [[<rect fill=#]]..ColorCritical..[[ x=1 y=]]..(147+j*26)..[[ fill-opacity=0.2 width=298 height=25 />]] ..
-                                           [[<text x=10 y=]]..(165+j*26)..[[ class="f15scb">]]..string.format("%.30s", v.name)..[[</text>]] ..
-                                           [[<text x=290 y=]]..(165+j*26)..[[ class="f15ecb">]]..GenerateCommaValue(string.format("%.0f", v.missinghp))..[[</text>]]
+                        output = output .. [[<rect fill=#]]..ColorCritical..[[ x=1 y=]]..(147+yPos)..[[ fill-opacity=0.2 width=298 height=25 />]] ..
+                                           [[<text x=10 y=]]..(missingHpYPos)..[[ class="f15scb">]]..string.format("%.30s", v.name)..[[</text>]] ..
+                                           [[<text x=290 y=]]..(missingHpYPos)..[[ class="f15ecb">]]..GenerateCommaValue(string.format("%.0f", v.missinghp))..[[</text>]]
                         if v.id == highlightID then
                             highlightX = elementPosition.x - coreWorldOffset
                             highlightY = elementPosition.y - coreWorldOffset
                             highlightZ = elementPosition.z - coreWorldOffset
-                            output = output .. [[<rect fill=#]]..ColorCritical..[[ x=1 y=]]..(147+j*26)..[[ fill-opacity=1 width=298 height=25 />]] ..
-                                               [[<text x=10 y=]]..(165+j*26)..[[ class="f15sxxxb">]]..string.format("%.30s", v.name)..[[</text>]] ..
-                                               [[<text x=290 y=]]..(165+j*26)..[[ class="f15exxxb">]]..GenerateCommaValue(string.format("%.0f", v.missinghp))..[[</text>]]
+                            output = output .. [[<rect fill=#]]..ColorCritical..[[ x=1 y=]]..(147+yPos)..[[ fill-opacity=1 width=298 height=25 />]] ..
+                                               [[<text x=10 y=]]..(missingHpYPos)..[[ class="f15sxxxb">]]..string.format("%.30s", v.name)..[[</text>]] ..
+                                               [[<text x=290 y=]]..(missingHpYPos)..[[ class="f15exxxb">]]..GenerateCommaValue(string.format("%.0f", v.missinghp))..[[</text>]]
                         end                   
                     end
                     j=j+1
@@ -1046,22 +1053,24 @@ function GetContentDamageScreen()
         for j = 1 + (CurrentDamagedPage - 1) * DamagePageSize, damagedElementsToDraw + (CurrentDamagedPage - 1) * DamagePageSize, 1 do
             i = i + 1
             local DP = damagedElements[j]
-            if UseMyElementNames == true then screenOutput = screenOutput .. [[<text x="40" y="]] .. (330 + i * 50) .. [[" class="f25sxx">]] .. string.format("%.23s", DP.name) .. [[</text>]]
-            else screenOutput = screenOutput .. [[<text x="40" y="]] .. (330 + i * 50) .. [[" class="f25sxx">]] .. string.format("%.23s", DP.type) .. [[</text>]]
+            local yCoord = 330 + i * 50
+            if UseMyElementNames == true then screenOutput = screenOutput .. [[<text x="40" y="]] .. (yCoord) .. [[" class="f25sxx">]] .. string.format("%.23s", DP.name) .. [[</text>]]
+            else screenOutput = screenOutput .. [[<text x="40" y="]] .. (yCoord) .. [[" class="f25sxx">]] .. string.format("%.23s", DP.type) .. [[</text>]]
             end
-            screenOutput = screenOutput .. [[<text x="485" y="]] .. (330 + i * 50) .. [[" class="f25exx">]] .. DP.percent .. [[%</text>]] ..
-                               [[<text x="614" y="]] .. (330 + i * 50) .. [[" class="f25exx">]] .. GenerateCommaValue(string.format("%.0f", DP.missinghp), true) .. [[</text>]] ..
-                               [[<text x="734" y="]] .. (330 + i * 50) .. [[" class="f25exx">]] .. getScraps(DP.missinghp, true) .. [[</text>]] ..
-                               [[<text x="908" y="]] .. (330 + i * 50) .. [[" class="f25exx">]] .. getRepairTime(DP.missinghp, true) .. [[</text>]] ..
-                               [[<line x1="30" x2="940" y1="]] .. (336 + i * 50) .. [[" y2="]] .. (336 + i * 50) .. [[" style="stroke:#]]..ColorSecondary..[[;stroke-opacity:0.2" />]]
+            screenOutput = screenOutput .. [[<text x="485" y="]] .. (yCoord) .. [[" class="f25exx">]] .. DP.percent .. [[%</text>]] ..
+                               [[<text x="614" y="]] .. (yCoord) .. [[" class="f25exx">]] .. GenerateCommaValue(string.format("%.0f", DP.missinghp), true) .. [[</text>]] ..
+                               [[<text x="734" y="]] .. (yCoord) .. [[" class="f25exx">]] .. getScraps(DP.missinghp, true) .. [[</text>]] ..
+                               [[<text x="908" y="]] .. (yCoord) .. [[" class="f25exx">]] .. getRepairTime(DP.missinghp, true) .. [[</text>]] ..
+                               [[<line x1="30" x2="940" y1="]] .. (yCoord+6) .. [[" y2="]] .. (yCoord+6) .. [[" style="stroke:#]]..ColorSecondary..[[;stroke-opacity:0.2" />]]
         end
         
         if #damagedElements > DamagePageSize then
+            local baseOffset = (damagedElementsToDraw + 1) * 50
             screenOutput = screenOutput ..
-                               [[<text x="485" y="]] .. (30+300 + 11 + (damagedElementsToDraw + 1) * 50) .. [[" class="f25mw">Page ]] .. CurrentDamagedPage .. " of " .. math.ceil(#damagedElements / DamagePageSize) ..[[</text>]]
+                               [[<text x="485" y="]] .. (30 + 300 + 11 + baseOffset) .. [[" class="f25mw">Page ]] .. CurrentDamagedPage .. " of " .. math.ceil(#damagedElements / DamagePageSize) ..[[</text>]]
 
             if CurrentDamagedPage < math.ceil(#damagedElements / DamagePageSize) then
-                screenOutput = screenOutput .. [[<svg x="30" y="]] .. (300 + 11 + (damagedElementsToDraw + 1) * 50) .. [[">
+                screenOutput = screenOutput .. [[<svg x="30" y="]] .. (300 + 11 + baseOffset) .. [[">
                             <rect x="0" y="0" rx="10" ry="10" width="200" height="50" style="fill:#]]..ColorWarning..[[;" />
                             <svg x="80" y="15"><path d="M52.48,35.23,69.6,19.4a3.23,3.23,0,0,0-2.19-5.6H32.59a3.23,3.23,0,0,0-2.19,5.6L47.52,35.23A3.66,3.66,0,0,0,52.48,35.23Z" transform="translate(-29.36 -13.8)"/></svg>
                         </svg>]]
@@ -1070,15 +1079,15 @@ function GetContentDamageScreen()
                     mode ="damage",
                     x1 = 65,
                     x2 = 260,
-                    y1 = 290 + (damagedElementsToDraw + 1) * 50,
-                    y2 = 290 + 50 + (damagedElementsToDraw + 1) * 50
+                    y1 = 290 + baseOffset,
+                    y2 = 290 + 50 + baseOffset
                 })
             else
                 DisableClickArea("DamagedPageDown","damage")
             end
 
             if CurrentDamagedPage > 1 then
-                screenOutput = screenOutput .. [[<svg x="740" y="]] .. (300 + 11 + (damagedElementsToDraw + 1) * 50) .. [[">
+                screenOutput = screenOutput .. [[<svg x="740" y="]] .. (300 + 11 + baseOffset) .. [[">
                             <rect x="0" y="0" rx="10" ry="10" width="200" height="50" style="fill:#]]..ColorWarning..[[;" />
                             <svg x="80" y="15"><path d="M47.52,14.77,30.4,30.6a3.23,3.23,0,0,0,2.19,5.6H67.41a3.23,3.23,0,0,0,2.19-5.6L52.48,14.77A3.66,3.66,0,0,0,47.52,14.77Z" transform="translate(-29.36 -13.8)"/></svg>
                         </svg>]]
@@ -1087,8 +1096,8 @@ function GetContentDamageScreen()
                     mode ="damage",
                     x1 = 750,
                     x2 = 950,
-                    y1 = 290 + (damagedElementsToDraw + 1) * 50,
-                    y2 = 290 + 50 + (damagedElementsToDraw + 1) * 50
+                    y1 = 290 + baseOffset,
+                    y2 = 290 + 50 + baseOffset
                 })
             else
                 DisableClickArea("DamagedPageUp","damage")
@@ -1129,13 +1138,14 @@ function GetContentDamageScreen()
         for j = 1 + (CurrentBrokenPage - 1) * DamagePageSize, brokenElementsToDraw + (CurrentBrokenPage - 1) * DamagePageSize, 1 do
             i = i + 1
             local DP = brokenElements[j]
-            if UseMyElementNames == true then screenOutput = screenOutput .. [[<text x="1000" y="]] .. (330 + i * 50) .. [[" class="f25sxx">]] .. string.format("%.30s", DP.name) .. [[</text>]]
-            else screenOutput = screenOutput .. [[<text x="1000" y="]] .. (330 + i * 50) .. [[" class="f25sxx">]] .. string.format("%.30s", DP.type) .. [[</text>]]
+            local yCoord = 330 + i * 50
+            if UseMyElementNames == true then screenOutput = screenOutput .. [[<text x="1000" y="]] .. (yCoord) .. [[" class="f25sxx">]] .. string.format("%.30s", DP.name) .. [[</text>]]
+            else screenOutput = screenOutput .. [[<text x="1000" y="]] .. (yCoord) .. [[" class="f25sxx">]] .. string.format("%.30s", DP.type) .. [[</text>]]
             end
-            screenOutput = screenOutput .. [[<text x="1564" y="]] .. (330 + i * 50) .. [[" class="f25exx">]] .. GenerateCommaValue(string.format("%.0f", DP.missinghp), true) .. [[</text>]] ..
-                               [[<text x="1684" y="]] .. (330 + i * 50) .. [[" class="f25exx">]] .. getScraps(DP.missinghp, true) .. [[</text>]] ..
-                               [[<text x="1858" y="]] .. (330 + i * 50) .. [[" class="f25exx">]] .. getRepairTime(DP.missinghp, true) .. [[</text>]] ..
-                               [[<line x1="980" x2="1890" y1="]] .. (336 + i * 50) .. [[" y2="]] .. (336 + i * 50) .. [[" style="stroke:#]]..ColorSecondary..[[;stroke-opacity:0.2" />]]
+            screenOutput = screenOutput .. [[<text x="1564" y="]] .. (yCoord) .. [[" class="f25exx">]] .. GenerateCommaValue(string.format("%.0f", DP.missinghp), true) .. [[</text>]] ..
+                               [[<text x="1684" y="]] .. (yCoord) .. [[" class="f25exx">]] .. getScraps(DP.missinghp, true) .. [[</text>]] ..
+                               [[<text x="1858" y="]] .. (yCoord) .. [[" class="f25exx">]] .. getRepairTime(DP.missinghp, true) .. [[</text>]] ..
+                               [[<line x1="980" x2="1890" y1="]] .. (yCoord+6) .. [[" y2="]] .. (yCoord+6) .. [[" style="stroke:#]]..ColorSecondary..[[;stroke-opacity:0.2" />]]
         end
 
 
