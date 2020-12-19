@@ -31,6 +31,15 @@ const bundles = [
             "src/Variables.lua",
             "src/DamageReport.lua",
             "src/TouchScreen.lua",
+            "src/Render/AGG.lua",
+            "src/Render/Cargo.lua",
+            "src/Render/Damage.lua",
+            "src/Render/DamageOutline.lua",
+            "src/Render/Flight.lua",
+            "src/Render/Map.lua",
+            "src/Render/Settings.lua",
+            "src/Render/Startup.lua",
+            "src/Render/Time.lua",
             "src/Render.lua",
             "src/Main.lua"
         ]
