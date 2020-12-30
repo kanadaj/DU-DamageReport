@@ -12,6 +12,44 @@ function script.onTick (timerId)
     end
 end
 
+function script.onActionStart(action)
+    if action == "up" then
+        ActionUp()
+    elseif action == "down" then
+        ActionDown()
+    elseif action == "strafeleft" then
+        ActionStrafeLeft()
+    elseif action == "straferight" then
+        ActionStrafeRight()
+    elseif action == "brake" then
+        KeyCTRLPressed = true
+    elseif action == "option1" then
+        ActionOption1()
+    elseif action == "option2" then
+        ActionOption2()
+    elseif action == "option3" then
+        ActionOption3()
+    elseif action == "option4" then
+        ActionOption4()
+    elseif action == "option5" then
+        ActionOption5()
+    elseif action == "option6" then
+        ActionOption6()
+    elseif action == "option7" then
+        ActionOption7()
+    elseif action == "option8" then
+        ActionOption8()
+    elseif action == "option9" then
+        ActionOption9()
+    end
+end
+
+function script.onActionStop(action)
+    if action == "brake" then
+        KeyCTRLPressed = false
+    end
+end
+
 function script.onStart()
     unit.hide()
     ClearConsole()
